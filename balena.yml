@@ -4,8 +4,10 @@ description: >-
   Application to support control of selected modelling guitar amplifiers
   sold by Fender Musical Instruments Corporation (FMIC) which are capable 
   of being controled over USB interfaces.
+
+post-provisioning: >-
     
-  Provides a web user interface for viewing and selecting presets (i.e.
+  This application provides a web user interface for viewing and selecting presets (i.e.
   particular configured amplifier/effect combinations) and exposes USB 
   traffic in log files and JSON preset configuration files
   extracted from the USB traffic.  
@@ -63,7 +65,6 @@ description: >-
   Git reference for this version: 
   %GITREF%
 
-post-provisioning: >-
   ## Usage instructions
 
   If you have a monitor attached to your device, when the application starts up it should
@@ -96,6 +97,6 @@ data:
     - raspberrypi400-64
     - raspberrypi5
 
-version: 0.3.1
+version: 0.3.2
 
 
