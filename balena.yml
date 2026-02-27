@@ -8,7 +8,7 @@ description: >-
   of being controled over USB interfaces.
 
 post-provisioning: >-
-    
+
   This application provides a web user interface for viewing and selecting presets (i.e.
   particular configured amplifier/effect combinations) and exposes USB 
   traffic in log files and JSON preset configuration files
