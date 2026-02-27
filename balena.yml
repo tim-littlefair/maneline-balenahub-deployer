@@ -1,4 +1,6 @@
-name: Maneline-balena
+name: maneline-app
+type: sw.application
+version: 0.3.2
 
 description: >-
   Application to support control of selected modelling guitar amplifiers
@@ -15,15 +17,18 @@ post-provisioning: >-
   This is an open source application, and the developer is not affiliated 
   with FMIC in any way.  Users choosing to experiment with this application
   with their FMIC-supplied equipment do so with no warranty from the developer.
+  
+  The primary repository for the source code of this application is at:
+  https://github.com/tim-littlefair/maneline.
     
   The following YouTube playlist contains videos demonstrating the 
   use of the application on two different FMIC amplifiers, and 
   also shows the software build/deployment process on the development 
-  platform:
+  platform
   https://www.youtube.com/playlist?list=PLeAWGhOp0MEoWJEE42cSzxjEoNR-tcFce.
   
   The application provides an alternative to two different first party 
-  companion applications published by FMIC for different ranges of amp models:
+  companion applications published by FMIC for different ranges of amp models
   
   - Fender FUSE for macOS/Windows
   
@@ -37,13 +42,13 @@ post-provisioning: >-
     models sold from around 2020.
   
   Although the application is expected to interoperate with all of the models
-  listed above, so far it has only been tested with the following models:
+  listed above, so far it has only been tested with the following models
   - Mustang I version 2
   - Mustang LT40S 
   
   Reports of success or failure with other models from these ranges would be 
   very welcome and can be made by adding comments to the following GitHub
-  discussion: https://github.com/tim-littlefair/maneline/discussions/14.
+  discussion https://github.com/tim-littlefair/maneline/discussions/14.
 
   Both ranges of amplifiers supported at by the application at present 
   receive control commands from the application over a wired USB interface.
@@ -62,9 +67,6 @@ post-provisioning: >-
   controlling the highly portable MMP product over BLE is also under 
   consideration.
 
-  Git reference for this version: 
-  %GITREF%
-
   ## Usage instructions
 
   If you have a monitor attached to your device, when the application starts up it should
@@ -75,7 +77,6 @@ post-provisioning: >-
   need to discover the numeric IP address of the device and convert it to a URL of the 
   form http://aaa.bbb.ccc.ddd:8080.
 
-type: sw.application
 
 assets:
   repository:
@@ -96,7 +97,3 @@ data:
     - raspberrypi3-64
     - raspberrypi400-64
     - raspberrypi5
-
-version: 0.3.2
-
-
