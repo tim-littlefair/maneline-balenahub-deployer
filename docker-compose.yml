@@ -1,0 +1,46 @@
+# docker-compose.yml
+
+# The design for the Balena image this file will render
+# is that it should contain the following two service containers:
+# + tl-maneline-web
+#   This container will contain the maneline CLI binary, and also a
+#   minimal web server which will serve a GUI reflecting the 
+#   CLI application state and servicing requests to send messages
+#   to the attached Mustang amp (which will be relayed to CLI 
+#   commands to the application)
+# + balenalabs-browser
+#   This is a kiosk browser provided as an example by balena.io.
+#   The intent of this service is that that the web GUI
+#   will be presented on the HDMI screen of the balena device.
+
+version: "2"
+
+volumes:
+  var-run-maneline:
+
+services:
+  maneline-web:
+    volumes:
+      - var-run-maneline:/var/run/maneline
+    build: .
+      # If Balena supported compose version 3 we would be able
+      # to use the build.additional_contexts parameter instead of having
+      # to build a tree from different parts of the repository
+      # context: ../.fake_compose_root
+      # additional_contexts:
+      #  - web_app=../web_app
+      #  - cli_jar_build=../desktop-cli/build/libs
+    network_mode: host
+    privileged: true
+    labels:
+      - io.balena.features.supervisor-api=1
+    ports:
+      - 8080
+    environment:
+      - UDEV=1
+    devices:
+      - /dev:/dev
+    cap_add:
+      - SYS_RAWIO
+
+

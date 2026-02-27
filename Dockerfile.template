@@ -1,0 +1,110 @@
+# Dockerfile.template for the container to run the desktopFHAUcli 
+# application which provides a command line interface to the 
+# USB-controllable features of the Mustang LT40S modelling 
+# guitar amplifier manufactured and sold by 
+# Fender Musical Instruments Corporation (FMIC).
+
+# Copyright (c) Tim Littlefair 2025
+# The author of the FHAU program and this Dockerfile 
+# is not affiliated to or authorized by FMIC, users 
+# of this program do so at their own risk with 
+# NO WARRANTY.
+# 
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# See ../../LICENSE for more details of your rights to redistribute, 
+# modify and use this software.
+
+# The design concept for the appliance which uses this container is
+# as follows:
+# - web UI presented using a kiosk-mode browser (in another container);
+# - start page for the web UI is served out of an HTTPS server running
+#   in the current container;
+# - the HTTP server process running in this container also integrates
+#   a USB HID client connected to the USB interface of a Fender LT40S 
+#   modelling guitar amplifier; and
+# - the HTTP server responds to requiests from the web client by
+#   providing a proxy UI for the LT40S device.
+
+# The HTTP server/USB HID client process running in the current container
+# is implemented as a Lua script (providing HTTP glue) running a Java
+# application which performs the USB/HID operations.
+
+# Presently, the kiosk-mode browser container uses an example balena 'block'
+# published on GitHub by Balena.  This may be replaced by a more lightweight 
+# kiosk solution at some time in the future but is not critical to the design
+# of the appliance.
+
+# The base image for this container is selected from the range 
+# of Docker images built by the Eclipse Temurin project for 
+# different OpenJDK versions.
+
+# The Alpine variant is much lighter, which would be helpful as the browser
+# container is quite heavy, but presently this fails with the message:
+# "fhau-cli: no matching manifest for linux/arm64/v8 in the manifest list entries"
+# FROM eclipse-temurin:17-jdk-alpine-3.21
+
+# When we try to run the FHAU CLI using OpenJDK 21 it
+# fails with the following as the first error line preceding the stack trace:
+# "Exception in thread "main" org.hid4java.HidException: Hidapi did not initialise: com/sun/jna/FromNativeContext"
+# This is believed to be related to an incompatibility between the aarch64 builds of the native libraries packaged 
+# in the hid4java gradle dependency and OpenJDK 21.
+# FROM eclipse-temurin:21
+
+# The current default eclipse-temurin image for OpenJDK 17 as at 30/06/2026
+# (built on top of Ubuntu 24.04.2 LTS)
+# has been tested and works - but is not lightweight
+FROM eclipse-temurin:17 AS platform-layer
+
+WORKDIR /home/maneline
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN rm -f /var/lib/apt/lists/*
+#RUN sed -e s^http://ports.ubuntu.com/ubuntu-ports^https://mirror.aarnet.edu.au/pub/ubuntu/ports^ -i /etc/apt/sources.list.d/ubuntu.sources
+RUN cat /etc/apt/sources.list.d/ubuntu.sources
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends --no-install-suggests apt-utils
+RUN apt-get install -y --no-install-recommends --no-install-suggests readline-common git wget
+
+# The web server glue which binds the web-ui to the CLI FHAU application is implemented in Lua
+RUN apt-get install -y --no-install-recommends --no-install-suggests lua5.1 \
+    lua-socket lua-filesystem lua-sec lua-zlib lua-cjson lua-cqueues lua-logging
+# I'd prefer the supply chain depended only on apt, but for
+# the moment the pegasus web server is used so we need luarocks
+# and the build-time apt dependencies for pegasus
+RUN apt-get install -y --no-install-recommends --no-install-suggests luarocks gcc liblz-dev zlib1g-dev
+RUN luarocks install pegasus
+
+# iproute2 is required to get the IP address of the device
+# zint is used to generate a 2D barcode with the URL of the webserver from the IP address
+# librsvg2-bin, optipng, fbi and fbset are used to render the barcode into SVG's for
+# displaying on the optional LCD UI
+# python3 and the python3- packages are used to render the barcode for displaying on the
+# optional e-paper UI
+RUN apt-get install -y --no-install-recommends --no-install-suggests \
+    iproute2 zint librsvg2-bin optipng fbi fbset \
+    python3 python3-pil python3-numpy python3-spidev python3-gpiozero python3-lgpio python3-watchdog
+
+FROM platform-layer AS web-app
+COPY ./lua ./lua
+COPY ./web_ui ./web_ui
+COPY ./lcd_ui ./lcd_ui
+COPY ./jar ./jar
+
+# Disable e-paper support for now
+# Might need to implement systemd running to get the behaviour
+# we want (i.e displaying out of service message before going down)
+# ref: https://docs.balena.io/learn/more/masterclasses/services-masterclass/#5-running-systemd-in-a-service
+# COPY ./epaper_ui ./epaper_ui
+# RUN sh ./epaper_ui/epaper_support_install.sh
+
+COPY run.sh $WORKDIR
+RUN chmod +x run.sh
+
+CMD [ "./run.sh" ]
