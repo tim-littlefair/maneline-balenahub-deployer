@@ -1,6 +1,6 @@
 name: maneline-app
 type: sw.application
-version: 0.3.2
+version: 0.3.3
 
 description: >-
   Application to support control of selected modelling guitar amplifiers
@@ -9,17 +9,22 @@ description: >-
 
 post-provisioning: >-
 
-  This application provides a web user interface for viewing and selecting presets (i.e.
-  particular configured amplifier/effect combinations) and exposes USB 
-  traffic in log files and JSON preset configuration files
-  extracted from the USB traffic.  
+  This application provides a web user interface for viewing and selecting presets 
+  (i.e.particular configured amplifier/effect combinations) and exposes USB 
+  traffic in log files and JSON preset configuration files extracted from the USB 
+  traffic.  
   
-  This is an open source application, and the developer is not affiliated 
+  
+  This is an open source application, and 
+  [the developer]( 
+  is not affiliated 
   with FMIC in any way.  Users choosing to experiment with this application
-  with their FMIC-supplied equipment do so with no warranty from the developer.
+  with their FMIC-manufactured equipment do so with NO WARRANTY from the 
+  developer or from FMIC.
   
   The primary repository for the source code of this application is at:
   https://github.com/tim-littlefair/maneline.
+
     
   The following YouTube playlist contains videos demonstrating the 
   use of the application on two different FMIC amplifiers, and 
@@ -27,6 +32,7 @@ post-provisioning: >-
   platform
   https://www.youtube.com/playlist?list=PLeAWGhOp0MEoWJEE42cSzxjEoNR-tcFce.
   
+
   The application provides an alternative to two different first party 
   companion applications published by FMIC for different ranges of amp models
   
@@ -41,14 +47,19 @@ post-provisioning: >-
     This program interoperates with the Rumble LT25, Mustang LT25, LT50 and LT40S 
     models sold from around 2020.
   
+  
   Although the application is expected to interoperate with all of the models
   listed above, so far it has only been tested with the following models
+  
   - Mustang I version 2
+  
   - Mustang LT40S 
+  
   
   Reports of success or failure with other models from these ranges would be 
   very welcome and can be made by adding comments to the following GitHub
   discussion https://github.com/tim-littlefair/maneline/discussions/14.
+  
 
   Both ranges of amplifiers supported at by the application at present 
   receive control commands from the application over a wired USB interface.
@@ -61,6 +72,7 @@ post-provisioning: >-
   GT-, GTX-, LTX- series and the headphone plug Mustang Micro Plus (MMP)
   product. Maneline does not support any of these at present.
   
+
   I hope that a future version of this application will be able to restore 
   previously captured JSON preset configurations, making the application a 
   solution for local backup and sharing of presets.  Adding support for 
@@ -75,7 +87,8 @@ post-provisioning: >-
   
   The application will also operate OK without a monitor attached, but in this case you 
   need to discover the numeric IP address of the device and convert it to a URL of the 
-  form http://aaa.bbb.ccc.ddd:8080.
+  form http://aaa.bbb.ccc.ddd:8080 in order to access the web user interface provided
+  by the application.
 
 
 assets:
