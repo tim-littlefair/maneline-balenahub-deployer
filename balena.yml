@@ -1,4 +1,4 @@
-name: balena-maneline
+name: Maneline-balena
 
 description: >-
   Application to support control of selected modelling guitar amplifiers
@@ -80,7 +80,7 @@ assets:
   repository:
     type: blob.asset
     data:
-      url: https://github.com/tim-littlefair/maneline
+      url: https://github.com/tim-littlefair/maneline-balenahub-deployer
   logo:
     type: blob.asset
     data:
@@ -96,6 +96,6 @@ data:
     - raspberrypi400-64
     - raspberrypi5
 
-version: 0.0.0
+version: 0.3.1
 
 
