@@ -1,9 +1,13 @@
 ## maneline-balenahub-deployer
 
+Maneline is an application which serves a web user interface
+to control and investigate the capabilities of some ranges
+of modelling guitar amplifiers sold (currently and formerly)
+by Fender Musical Instruments Corporation (FMIC).
+
 This repository acts as a wrapper for the sibling 
 [Maneline](https://github.com/tim-littlefair/maneline)
-project repository to allowthe Maneline web control application 
-for Fender modelling guitar amplifiers to be published 
+project repository to allow Maneline to be published 
 as a balenaHub example application.
 
 Maneline is a multi-platform project which needs a Java .jar 
