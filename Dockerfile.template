@@ -4,7 +4,7 @@
 # guitar amplifier manufactured and sold by 
 # Fender Musical Instruments Corporation (FMIC).
 
-# Copyright (c) Tim Littlefair 2025
+# Copyright (c) Tim Littlefair 2025-
 # The author of the FHAU program and this Dockerfile 
 # is not affiliated to or authorized by FMIC, users 
 # of this program do so at their own risk with 
@@ -34,19 +34,9 @@
 # is implemented as a Lua script (providing HTTP glue) running a Java
 # application which performs the USB/HID operations.
 
-# Presently, the kiosk-mode browser container uses an example balena 'block'
-# published on GitHub by Balena.  This may be replaced by a more lightweight 
-# kiosk solution at some time in the future but is not critical to the design
-# of the appliance.
-
 # The base image for this container is selected from the range 
 # of Docker images built by the Eclipse Temurin project for 
 # different OpenJDK versions.
-
-# The Alpine variant is much lighter, which would be helpful as the browser
-# container is quite heavy, but presently this fails with the message:
-# "fhau-cli: no matching manifest for linux/arm64/v8 in the manifest list entries"
-# FROM eclipse-temurin:17-jdk-alpine-3.21
 
 # When we try to run the FHAU CLI using OpenJDK 21 it
 # fails with the following as the first error line preceding the stack trace:
@@ -55,7 +45,7 @@
 # in the hid4java gradle dependency and OpenJDK 21.
 # FROM eclipse-temurin:21
 
-# The current default eclipse-temurin image for OpenJDK 17 as at 30/06/2026
+# The current default eclipse-temurin image for OpenJDK 17 as at 30/06/2025
 # (built on top of Ubuntu 24.04.2 LTS)
 # has been tested and works - but is not lightweight
 FROM eclipse-temurin:17 AS platform-layer
@@ -63,6 +53,8 @@ FROM eclipse-temurin:17 AS platform-layer
 WORKDIR /home/maneline
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV MANELINE_VERSION 0.3.3
+ENV MANELINE_PREBUILD_ZIP https://github.com/tim-littlefair/maneline/releases/download/release-$MANELINE_VERSION/maneline-$MANELINE_VERSION.zip
 
 RUN rm -f /var/lib/apt/lists/*
 #RUN sed -e s^http://ports.ubuntu.com/ubuntu-ports^https://mirror.aarnet.edu.au/pub/ubuntu/ports^ -i /etc/apt/sources.list.d/ubuntu.sources
@@ -91,6 +83,6 @@ RUN apt-get install -y --no-install-recommends --no-install-suggests \
     iproute2 zint librsvg2-bin optipng fbi fbset \
     python3 python3-pil python3-numpy python3-spidev python3-gpiozero python3-lgpio python3-watchdog
 
-RUN curl -L https://github.com/tim-littlefair/maneline/releases/download/release-0.3.2/maneline-0.3.2.zip | jar --extract
+RUN curl -L $MANELINE_PREBUILD_ZIP | jar --extract
 RUN chmod +x ./run.sh
 CMD [ "./run.sh" ]
